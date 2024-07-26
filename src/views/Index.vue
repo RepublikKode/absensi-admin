@@ -312,6 +312,12 @@ const navigation = [
     icon: BookOpenIcon,
     current: false,
   },
+  {
+    name: "Jadwal",
+    href: "#/jadwals",
+    icon: BookOpenIcon,
+    current: false,
+  },
 ];
 
 const sidebarOpen = ref(false);

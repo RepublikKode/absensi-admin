@@ -8,6 +8,7 @@ const Mapel = () => import("@/views/mapel/Index.vue");
 const Laporan = () => import("@/views/laporan/Index.vue");
 const Absen = () => import("@/views/absen/Index.vue");
 const Jadwal = () => import("@/views/jadwal/Index.vue");
+const Jadwals = () => import("@/views/jadwal/Jadwal.vue");
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -88,10 +89,25 @@ const router = createRouter({
           name: "absen",
           component: Absen,
         },
+        {
+          path: "/jadwals",
+          name: "jadwals",
+          component: Jadwals,
+        },
+        {
+          path: "/jadwals/create",
+          name: "jadwals-create",
+          component: () => import("@/views/jadwal/Create.vue")
+        },
+        {
+          path: "/jadwals/edit/:id",
+          name: "jadwals-edit",
+          component: () => import("@/views/jadwal/Edit.vue")
+        }
       ],
     },
     {
-      path: "/jadwa/:id",
+      path: "/jadwal/:id",
       name: "jadwal",
       component: Jadwal,
       meta: {
