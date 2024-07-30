@@ -2,10 +2,12 @@ import axios from "../axios";
 import { ref } from "vue";
 import useSwal from "../swal";
 import router from "../../router";
+import { useRouter, useRoute } from 'vue-router'
 
 export default function useKelas() {
   const kelas = ref([]);
   const { accepted, confirm, rejected } = useSwal();
+  const route = useRoute()
 
   async function index() {
     const response = await axios.get("/api/v1/kelas");
@@ -27,8 +29,8 @@ export default function useKelas() {
     }
   }
 
-  async function show(id) {
-    const response = await axios.get(`/api/v1/kelas/${id}`);
+  async function show() {
+    const response = await axios.get(`/api/v1/kelas/${route.params.id}`);
     kelas.value = response.data.kelas;
   }
 

@@ -1,117 +1,153 @@
 <template>
-  <div class="flex justify-center flex-col gap-12 items-center">
-    <div class="my-12">
-      <h3 class="uppercase font-bold text-xl">
+  <div class="w-full flex justify-center flex-col gap-12 items-center">
+    <div class="w-full my-12 flex flex-col justify-center items-center">
+      <h3 class="uppercase font-bold text-xl text-center">
         Jadwal Kelas {{ kelas.kelas }}
       </h3>
       <button @click="exportPDF" class="mt-5 bg-red-500 text-white px-12 py-4">
         Export PDF
       </button>
-      <div
-        class="flex gap-12"
-        @drop="onDrop($event, 0)"
-        @dragenter.prevent
-        @dragover.prevent
-      >
-        <div
-          v-for="item in getList(0)"
-          :key="item.id"
-          class="w-12 h-12 bg-blue-300"
-          draggable="true"
-          @dragstart="startDrag($event, item)"
-        >
-          {{ item.nama }}
-        </div>
-      </div>
+      <table ref="tableToExport" class="border border-black w-2/3 mt-12">
+        <thead>
+          <th class="border-l border-t border-b border-black">Hari</th>
+          <th class="border border-black capitalize w-44" v-for="item in 8" :key="item">{{ item }}</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="uppercase border border-black text-center w-32">Senin</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamSatu.nama != null">{{ seninJamSatu.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamDua.nama != null">{{ seninJamDua.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamTiga.nama != null">{{ seninJamTiga.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamEmpat.nama != null">{{ seninJamEmpat.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamLima.nama != null">{{ seninJamLima.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamEnam.nama != null">{{ seninJamEnam.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamTujuh.nama != null">{{ seninJamTujuh.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="seninJamDelapan.nama != null">{{ seninJamDelapan.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+          </tr>
+          <tr>
+            <td class="uppercase border border-black text-center w-32">Selasa</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamSatu.nama != null">{{ selasaJamSatu.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamDua.nama != null">{{ selasaJamDua.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamTiga.nama != null">{{ selasaJamTiga.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamEmpat.nama != null">{{ selasaJamEmpat.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamLima.nama != null">{{ selasaJamLima.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamEnam.nama != null">{{ selasaJamEnam.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamTujuh.nama != null">{{ selasaJamTujuh.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="selasaJamDelapan.nama != null">{{ selasaJamDelapan.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+          </tr>
+          <tr>
+            <td class="uppercase border border-black text-center w-32">Rabu</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamSatu.nama != null">{{ rabuJamSatu.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamDua.nama != null">{{ rabuJamDua.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamTiga.nama != null">{{ rabuJamTiga.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamEmpat.nama != null">{{ rabuJamEmpat.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamLima.nama != null">{{ rabuJamLima.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamEnam.nama != null">{{ rabuJamEnam.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamTujuh.nama != null">{{ rabuJamTujuh.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="rabuJamDelapan.nama != null">{{ rabuJamDelapan.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+          </tr>
+          <tr>
+            <td class="uppercase border border-black text-center w-32">Kamis</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamSatu.nama != null">{{ kamisJamSatu.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamDua.nama != null">{{ kamisJamDua.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamTiga.nama != null">{{ kamisJamTiga.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamEmpat.nama != null">{{ kamisJamEmpat.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamLima.nama != null">{{ kamisJamLima.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamEnam.nama != null">{{ kamisJamEnam.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamTujuh.nama != null">{{ kamisJamTujuh.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="kamisJamDelapan.nama != null">{{ kamisJamDelapan.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+          </tr>
+          <tr>
+            <td class="uppercase border border-black text-center w-32">Jumat</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamSatu.nama != null">{{ jumatJamSatu.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamDua.nama != null">{{ jumatJamDua.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamTiga.nama != null">{{ jumatJamTiga.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamEmpat.nama != null">{{ jumatJamEmpat.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamLima.nama != null">{{ jumatJamLima.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamEnam.nama != null">{{ jumatJamEnam.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamTujuh.nama != null">{{ jumatJamTujuh.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+            <td class="border border-black text-center bg-sky-500 text-white font-medium h-20" v-if="jumatJamDelapan.nama != null">{{ jumatJamDelapan.nama }}</td>
+            <td class="border border-black text-center bg-red-500 text-white font-medium h-20" v-else>Kosong</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table ref="tableToExport" class="table-auto border border-black w-80">
-      <tr class="border border-black">
-        <th class="border p-4 border-black" v-for="item in 11" :key="item">
-          {{ item }}
-        </th>
-      </tr>
-      <tr
-        class="border w-12 border-black"
-        v-for="(item, rowIndex) in hari"
-        :key="item.hari"
-      >
-        <td class="border p-12 border-black">
-          {{ item.hari }}
-        </td>
-        <td
-          v-bind:class="col"
-          class="border relative p-12 border-black hover:bg-slate-200"
-          v-for="(item, colIndex) in 10"
-          :key="colIndex"
-          @drop="onDrop($event, rowIndex, colIndex)"
-          @dragenter.prevent
-          @dragover.prevent
-        >
-          <!-- {{ rowIndex * 10 + colIndex + 1 }} -->
-          <div
-            v-for="(item, itemIndex) in getList(rowIndex, colIndex)"
-            :key="itemIndex"
-            class="w-full h-full flex justify-center flex-col items-center absolute bg-blue-300 top-0 left-0"
-            draggable="true"
-            @dragstart="startDrag($event, item)"
-          >
-            {{ item.nama }}
-            <h3 class="font-bold text-xl">{{ item.mapel?.mapel }}</h3>
-          </div>
-        </td>
-      </tr>
-    </table>
   </div>
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
+import useKelas from "../../services/data/kelas";
+import useJadwal from "../../services/data/jadwal";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { ref, onMounted } from "vue";
-import useKelas from "../../services/data/kelas";
-import { useRoute } from "vue-router";
-import useUser from "../../services/data/user";
 
-const { show, kelas } = useKelas();
-const { user, index } = useUser();
-
-const router = useRoute();
+const { show, kelas } = useKelas()
+const { 
+  jadwal,
+  jadwalSenin, jadwalSelasa, jadwalRabu, jadwalKamis, jadwalJumat,
+  seninJamSatu, seninJamDua, seninJamTiga, seninJamEmpat, seninJamLima, seninJamEnam, seninJamTujuh, seninJamDelapan,
+  selasaJamSatu, selasaJamDua, selasaJamTiga, selasaJamEmpat, selasaJamLima, selasaJamEnam, selasaJamTujuh, selasaJamDelapan,
+  rabuJamSatu, rabuJamDua, rabuJamTiga, rabuJamEmpat, rabuJamLima, rabuJamEnam, rabuJamTujuh, rabuJamDelapan,
+  kamisJamSatu, kamisJamDua, kamisJamTiga, kamisJamEmpat, kamisJamLima, kamisJamEnam, kamisJamTujuh, kamisJamDelapan,
+  jumatJamSatu, jumatJamDua, jumatJamTiga, jumatJamEmpat, jumatJamLima, jumatJamEnam, jumatJamTujuh, jumatJamDelapan,
+} = useJadwal()
 
 const hari = [
-  { hari: "Senin" },
-  { hari: "Selasa" },
-  { hari: "Rabu" },
-  { hari: "Kamis" },
-  { hari: "Jum'at" },
-];
-
-const data = ref([
-  { id: 0, nama: "A", list: 0 },
-  { id: 1, nama: "B", list: 0 },
-]);
+  'senin',
+  'selasa',
+  'rabu',
+  'kamis',
+  'jumat'
+]
 
 onMounted(() => {
-  show(router.params.id);
-  index();
-});
-
-function getList(row, col) {
-  return user.value.filter((item) => item.list === row * 10 + col);
-}
-
-function startDrag(event, item) {
-  console.log(item);
-  event.dataTransfer.dropEffect = "move";
-  event.dataTransfer.effectAllowed = "move";
-  event.dataTransfer.setData("itemId", item.id);
-}
-
-function onDrop(event, row, col) {
-  console.log(row, col);
-  const itemId = event.dataTransfer.getData("itemId");
-  const item = user.value.find((item) => item.id == itemId);
-  item.list = row * 10 + col;
-}
+  show()
+  jadwalSenin()
+  jadwalSelasa()
+  jadwalRabu()
+  jadwalKamis()
+  jadwalJumat()
+})
 
 const tableToExport = ref(null);
 
@@ -130,4 +166,5 @@ async function exportPDF() {
   // Save or open the PDF
   pdf.save("table-export.pdf");
 }
+
 </script>
