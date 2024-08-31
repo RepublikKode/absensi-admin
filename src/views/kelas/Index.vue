@@ -5,6 +5,12 @@
       class="flex items-center flex-col lg:flex-row lg:justify-end gap-3 mt-3"
     >
       <router-link
+        :to="{ name: 'jadwal-sekolah' }"
+        class="flex items-center gap-2 text-sm px-5 py-2 rounded-md bg-orange-500 hover:bg-orange-600 text-white"
+      >
+        <PlusIcon class="w-5" /> Jadwal Sekolah
+      </router-link>
+      <router-link
         :to="{ name: 'kelas-create' }"
         class="flex items-center gap-2 text-sm px-5 py-2 rounded-md bg-orange-500 hover:bg-orange-600 text-white"
       >
@@ -53,7 +59,7 @@
               {{ i++ }}
             </td>
             <td class="pr-3 py-2 text-xs text-gray-500 lg:table-cell">
-              {{ item.kelas }}
+              {{ item.fix_kelas }} 
             </td>
             <td class="pr-3 py-2 text-xs text-gray-500 lg:table-cell">
               {{ item.metode_pembelajaran }}

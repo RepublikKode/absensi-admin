@@ -31,24 +31,7 @@
                   id=""
                 >
                   <option v-for="kelas in kelas" :key="kelas.id" :value="kelas.id">
-                    {{ kelas.kelas }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-span-6">
-                <label
-                  for="kelas"
-                  class="block text-xs font-medium text-gray-700"
-                  >Jam Ke</label
-                >
-                <select
-                  v-model="jadwal.waktu_id"
-                  class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
-                  name=""
-                  id=""
-                >
-                  <option v-for="waktu in waktu" :key="waktu.jamke" :value="waktu.id">
-                    {{ waktu.jamke }}
+                    {{ kelas.kelas }} {{ kelas.jurusan.jurusan }} {{ kelas.alphabet }}
                   </option>
                 </select>
               </div>
@@ -103,6 +86,26 @@
                   </option>
                 </select>
               </div>
+              <div class="col-span-6">
+                <label
+                  for="jurusan"
+                  class="block text-xs font-medium text-gray-700"
+                  >Jurusan</label
+                >
+                <select
+                  v-model="forms.jurusan_id"
+                  class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
+                  name=""
+                  id="jurusan"
+                >
+                  <option selected :value="jadwalJurusan.id">
+                    {{ jadwalJurusan.jurusan }}
+                  </option>
+                  <option v-for="jurusan in jurusan" :key="jurusan.id" :value="jurusan.id">
+                    {{ jurusan.jurusan }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="px-4 py-3 bg-gray-50">
@@ -138,11 +141,13 @@ import useJadwal from "../../services/data/jadwal";
 import useWaktu from '../../services/data/waktu'
 import useMapel from '../../services/data/mapel'
 import useKelas from "../../services/data/kelas";
+import useJurusan from "../../services/data/jurusan";
 
-const { jadwal, getJadwal, updateJadwal } = useJadwal()
+const { jadwal, getJadwal, updateJadwal, jadwalJurusan } = useJadwal()
 const { waktu, indexWaktu } = useWaktu()
 const { mapel, indexMapel } = useMapel()
 const { kelas, index } = useKelas()
+const { jurusan, indexJurusan } = useJurusan()
 
 const hari = [
     'senin',
@@ -170,6 +175,7 @@ onMounted(() => {
     indexWaktu()
     indexMapel()
     index()
+    indexJurusan()
 })
 
 function doStore(jadwal) {

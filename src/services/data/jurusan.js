@@ -4,14 +4,14 @@ import axios from "../axios";
 export default function useJurusan() {
   const jurusan = ref([]);
 
-  async function index() {
+  async function indexJurusan() {
     const response = await axios.get("/api/v1/admin/jurusan");
-    console.log(response.data);
     jurusan.value = response.data;
+    console.log('jurusan:', jurusan.value);
   }
 
   return {
     jurusan,
-    index,
+    indexJurusan,
   };
 }

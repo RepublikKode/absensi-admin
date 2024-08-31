@@ -10,11 +10,12 @@
                 <label
                   for="kelas"
                   class="block text-xs font-medium text-gray-700"
-                  >Nama Kelas</label
+                  >Kelas</label
                 >
                 <input
                   type="text"
                   v-model="form.kelas"
+                  id="kelas"
                   class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
                 />
               </div>
@@ -22,16 +23,33 @@
                 <label
                   for="kelas"
                   class="block text-xs font-medium text-gray-700"
-                  >Metode Pembelajaran</label
+                  >Jurusan</label
                 >
                 <select
-                  v-model="form.metode_pembelajaran"
+                  v-model="form.jurusan_id"
                   class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
                   name=""
                   id=""
                 >
-                  <option v-for="item in metode" :value="item.metode">
-                    {{ item.metode }}
+                  <option v-for="jurusan in jurusan" :key="jurusan.id" :value="jurusan.id">
+                    {{ jurusan.jurusan }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-span-6">
+                <label
+                  for="kelas"
+                  class="block text-xs font-medium text-gray-700"
+                  >Alfabet</label
+                >
+                <select
+                  v-model="form.alphabet"
+                  class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
+                  name=""
+                  id=""
+                >
+                  <option v-for="letters in letters" :key="letters" :value="letters">
+                    {{ letters }}
                   </option>
                 </select>
               </div>
@@ -65,10 +83,15 @@
 </template>
 <script setup>
 import { PencilSquareIcon, ChevronLeftIcon } from "@heroicons/vue/24/outline";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import useKelas from "../../services/data/kelas";
 
-const { store } = useKelas();
+const letters = []
+for(let i = 65; i <= 90; i++) {
+  letters.push(String.fromCharCode(i))
+}
+
+const { store, jurusan, getJurusan } = useKelas();
 const metode = [
   {
     metode: "pjj",
@@ -80,10 +103,15 @@ const metode = [
 
 const form = reactive({
   kelas: "",
-  metode_pembelajaran: "",
+  jurusan: "",
+  alphabet: ""
 });
 
 const save = async () => {
   store({ ...form });
 };
+
+onMounted(() => {
+  getJurusan()
+})
 </script>

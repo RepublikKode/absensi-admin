@@ -74,7 +74,7 @@
               {{ item.user.nama }}
             </td>
             <td class="pr-3 py-2 text-xs text-gray-500 lg:table-cell">
-              {{ item.kelas.kelas }}
+              {{ item.kelas.kelas }} {{ item.kelas.alphabet }}
             </td>
             <td class="pr-3 py-2 text-xs text-gray-500 lg:table-cell">
               {{ item.mapel.mapel }}

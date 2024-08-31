@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import JadwalSekolah from "../views/jadwal/JadwalSekolah.vue";
+import JadwalGuru from "../views/jadwal/JadwalGuru.vue";
 const Login = () => import("@/views/auth/Login.vue");
 const Index = () => import("@/views/Index.vue");
 const Dashboard = () => import("@/views/Dashboard.vue");
@@ -103,7 +105,7 @@ const router = createRouter({
           path: "/jadwals/edit/:id",
           name: "jadwals-edit",
           component: () => import("@/views/jadwal/Edit.vue")
-        }
+        },
       ],
     },
     {
@@ -114,6 +116,22 @@ const router = createRouter({
         authRequired: true,
       },
     },
+    {
+      path: '/jadwalSekolah',
+      name: 'jadwal-sekolah',
+      component: JadwalSekolah,
+      meta: {
+        authRequired: true
+      }
+    },
+    {
+      path: '/jadwalGuru/:id',
+      name: 'jadwal-guru',
+      component: JadwalGuru,
+      meta: {
+        authRequired: true
+      }
+    }
   ],
 });
 

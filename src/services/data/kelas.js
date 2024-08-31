@@ -6,13 +6,18 @@ import { useRouter, useRoute } from 'vue-router'
 
 export default function useKelas() {
   const kelas = ref([]);
+  const jurusan = ref([])
   const { accepted, confirm, rejected } = useSwal();
   const route = useRoute()
 
   async function index() {
     const response = await axios.get("/api/v1/kelas");
-    console.log(response.data);
     kelas.value = response.data.kelas;
+  }
+
+  async function getJurusan() {
+    const response = await axios.get('/api/v1/admin/jurusan');
+    jurusan.value = response.data
   }
 
   async function store(payload) {
@@ -78,5 +83,7 @@ export default function useKelas() {
     update,
     destroy,
     kelas,
+    jurusan,
+    getJurusan
   };
 }

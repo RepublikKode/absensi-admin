@@ -317,7 +317,7 @@ const navigation = [
     href: "#/jadwals",
     icon: BookOpenIcon,
     current: false,
-  },
+  }
 ];
 
 const sidebarOpen = ref(false);

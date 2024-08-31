@@ -51,12 +51,6 @@
             </th>
             <th
               scope="col"
-              class="px-3 py-2.5 text-left text-xs font-semibold text-white"
-            >
-              Password
-            </th>
-            <th
-              scope="col"
               class="px-3 py-2.5 text-center text-xs font-semibold text-white"
             >
               Action
@@ -64,7 +58,7 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200 bg-white">
-          <tr v-for="item in user">
+          <tr v-for="item in user" :key="item">
             <td
               class="w-full max-w-0 py-2 text-xs font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6"
             >
@@ -82,16 +76,19 @@
             <td class="px-3 py-2 text-xs text-gray-500 lg:table-cell">
               {{ item.username }}
             </td>
-            <td class="px-3 py-2 text-xs text-gray-500 lg:table-cell">
-              {{ item.password }}
-            </td>
             <td class="pl-3 py-2 text-xs text-gray-500 lg:table-cell">
-              <div class="flex justify-around">
+              <div class="flex justify-center gap-1">
                 <router-link
                   :to="{ name: 'user-edit', params: { id: item.id } }"
                   class="flex gap-2 text-sm px-5 py-2 rounded-md bg-orange-500 hover:bg-orange-600 text-white"
                 >
                   <PencilSquareIcon class="w-5" /> Edit
+                </router-link>
+                <router-link
+                  :to="{ name: 'jadwal-guru', params: { id: item.id } }"
+                  class="flex gap-2 text-sm px-5 py-2 rounded-md bg-orange-500 hover:bg-orange-600 text-white"
+                >
+                  <PencilSquareIcon class="w-5" /> Jadwal
                 </router-link>
                 <button
                   @click="destroy(item.id)"
