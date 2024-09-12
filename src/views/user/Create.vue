@@ -138,7 +138,7 @@ import useMapel from "../../services/data/mapel";
 import { onMounted, reactive } from "vue";
 
 const { doRegister, indexRoles, roles } = useAuth();
-const { index, jurusan } = useJurusan();
+const { indexJurusan, jurusan } = useJurusan();
 const { indexMapel, mapel } = useMapel();
 const form = reactive({
   nama: "",
@@ -155,7 +155,7 @@ const save = async () => {
 };
 
 onMounted(() => {
-  index();
+  indexJurusan();
   indexMapel();
   indexRoles();
 });

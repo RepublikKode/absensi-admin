@@ -7,67 +7,61 @@
       <button @click="exportPDF" class="mt-5 bg-red-500 text-white px-12 py-4">
         Export PDF
       </button>
-      <table ref="tableToExport" class="border border-black w-2/3 mt-12">
-        <thead>
-          <th class="border-l border-t border-b border-black py-2">Hari</th>
-          <th
-            class="border border-black capitalize w-44"
-            v-for="item in 15"
-            :key="item"
-          >
-            {{ item }}
-          </th>
-        </thead>
-        <tbody>
-          <tr v-for="day in hari" :key="day">
-            <td class="border border-black px-2 py-1 capitalize">{{ day }}</td>
-            <td
-              v-for="(subject, index) in jadwal[day]"
-              :key="index"
-              :class="getBgColor(subject.mapel.mapel)"
-              class="border border-black text-white px-2 py-2"
+      <div class="w-full" ref="tableToExport">
+        <h5>Jadwal Kelas {{ kelas.fix_kelas }}</h5>
+        <table
+          v-for="(group, minggu) in jadwal"
+          :key="minggu"
+          class="border border-black w-2/3 mt-12"
+        >
+          <caption class="text-left font-bold mt-4">
+            Hari {{
+              minggu
+            }}
+          </caption>
+          <thead>
+            <th class="border-l border-t border-b border-black py-2">Minggu</th>
+            <th
+              class="border border-black capitalize"
+              v-for="item in 15"
+              :key="item"
             >
-              <div
-                class="flex justify-between"
+              {{ item }}
+            </th>
+          </thead>
+          <tbody>
+            <tr v-for="(dayGroup, day) in group" :key="day">
+              <td class="border border-black px-2 py-1 capitalize">
+                {{ day }}
+              </td>
+              <td
+                v-for="(subject, index) in dayGroup"
+                :key="index"
+                :class="getBgColor(subject.mapel.mapel)"
+                class="border border-black text-white"
               >
-                <span class="text-sm w-32 h-14">
-                  {{ subject.mapel.mapel || "-" }}
-                </span>
-                <div class="flex items-end">
-                  <span class="text-xs">
+                <div class="w-full flex flex-col items-center justify-center">
+                  <span class="text-xs h-4 w-28 text-center">
+                    {{ subject.mapel.mapel || "-" }}
+                  </span>
+                  <span class="text-xs h-14 text-center">
                     {{ subject.user.nama || "-" }}
                   </span>
-                </div>
-              </div>
-              <!-- <div
-                v-if="subject && Number(subject.user_id) == Number(route.params.id)"
-                class="flex justify-between"
-              >
-                <span class="text-sm w-32 h-14">
-                  {{ subject.mapel.mapel || "-" }}
-                </span>
-                <div class="flex items-end">
-                  <span class="text-xs">
-                    {{ subject.user.nama || "-" }}
+                  <span class="text-xs h-14 text-center">
+                    {{ subject.ruang || "-" }}
                   </span>
                 </div>
-              </div>
-              <div v-else>
-                <span class="text-sm w-32 h-14">a</span>
-                <div class="flex items-end">
-                  <span class="text-xs">a</span>
-                </div>
-              </div> -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import useKelas from "../../services/data/kelas";
 import useJadwal from "../../services/data/jadwal";
@@ -112,31 +106,45 @@ onMounted(() => {
 const tableToExport = ref(null);
 
 async function exportPDF() {
+  await nextTick(); // Menunggu DOM selesai dirender
+
   const table = tableToExport.value;
 
-  // Use html2canvas to capture the table as an image
-  const canvas = await html2canvas(table);
+  if (!table) {
+    console.error("Table not found!");
+    return;
+  }
 
-  // Get canvas dimensions in pixels
-  const imgData = canvas.toDataURL("image/png");
-  const imgWidth = canvas.width;
-  const imgHeight = canvas.height;
+  try {
+    // Gunakan html2canvas untuk menangkap gambar tabel
+    const canvas = await html2canvas(table, {
+      scale: 2, // meningkatkan resolusi canvas
+      useCORS: true, // menangani sumber daya lintas domain jika diperlukan
+    });
 
-  // Initialize jsPDF with custom dimensions in pixels
-  const pdf = new jsPDF({
-    orientation: imgWidth > imgHeight ? "l" : "p",
-    unit: "px",
-    format: [imgWidth, imgHeight],
-  });
+    // Ambil data gambar dari canvas
+    const imgData = canvas.toDataURL("image/png");
 
-  // Optional: Adjust the position if needed
-  const marginTop = 0; // Change this value to adjust vertical position
-  const marginLeft = 0; // Change this value to adjust horizontal position
+    const pdf = new jsPDF({
+      orientation: "landscape", // Ubah orientasi menjadi landscape untuk tabel yang lebar
+      unit: "mm",
+      format: "a4", // format A4 standar
+    });
 
-  // Add the captured image to the PDF
-  pdf.addImage(imgData, "PNG", marginLeft, marginTop, imgWidth, imgHeight);
+    // Ukuran halaman PDF A4 dalam mm
+    const pageWidth = 297; // Lebar PDF A4 dalam mm (landscape)
+    const pageHeight = 210; // Tinggi PDF A4 dalam mm (landscape)
+    const imgWidth = canvas.width > canvas.height ? pageWidth : pageHeight;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Sesuaikan tinggi sesuai rasio lebar
 
-  // Save or open the PDF
-  pdf.save("table-export.pdf");
+    // Tambahkan gambar ke PDF, mengecilkan gambar agar sesuai dengan lebar halaman
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+    // Simpan file PDF
+    pdf.save("table-export.pdf");
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
 }
+
 </script>

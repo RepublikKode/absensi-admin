@@ -5,7 +5,7 @@
       <form @submit.prevent="doStore(forms)" method="POST">
         <div class="shadow overflow-hidden rounded-md">
           <div class="px-4 py-5 bg-white p-6">
-            <div class="grid grid-cols-6 gap-6">
+            <div class="w-full grid grid-cols-6 gap-6">
               <div class="col-span-6">
                 <label
                   for="userID"
@@ -34,6 +34,30 @@
                     {{ kelas.kelas }} {{ kelas.jurusan.jurusan }} {{ kelas.alphabet }}
                   </option>
                 </select>
+              </div>
+              <div class="col-span-6">
+                <label
+                  for="userID"
+                  class="block text-xs font-medium text-gray-700"
+                  >Minggu</label
+                >
+                <select
+                  v-model="forms.minggu"
+                  class="capitalize mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
+                  name=""
+                  id=""
+                >
+                  <option>
+                    1
+                  </option>
+                  <option>
+                    2
+                  </option>
+                </select>
+              </div>
+              <div class="col span-6 w-32">
+                <label for="userID" class="bloct text-xs font-medium text-gray-700">Ruangan</label>
+                <input type="text" v-model="forms.ruang" class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md">
               </div>
               <div class="col-span-6">
                 <label
@@ -103,6 +127,18 @@
                   </option>
                 </select>
               </div>
+              <div class="col-span-6">
+                <label
+                  for="userID"
+                  class="block text-xs font-medium text-gray-700"
+                  >Total Jam</label
+                >
+                <input
+                  type="number"
+                  v-model="forms.total_jam"
+                  class="mt-1 p-2 font-medium bg-slate-100 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-base border-gray-300 rounded-md"
+                />
+              </div>
             </div>
           </div>
           <div class="px-4 py-3 bg-gray-50">
@@ -162,10 +198,13 @@ const metode = [
 const forms = ref({
     user_id: '',
     waktu_id: '',
+    minggu: '',
     hari: '',
     metode_pembelajaran: '',
     mapel_id: '',
-    jurusan_id: ''
+    jurusan_id: '',
+    total_jam: '',
+    ruang: ''
 })
 
 onMounted(() => {

@@ -9,50 +9,74 @@
         </button>
         
         <!-- Loop untuk setiap kelas -->
-        <div ref="tableToExport" v-for="(jadwalHari, kelas) in tableJadwal" :key="kelas" class="w-full my-6">
+      <!-- Loop untuk setiap minggu -->
+      <div
+        ref="tableToExport"
+        v-for="(jadwalMinggu, minggu) in tableJadwal"
+        :key="minggu"
+        class="w-full my-6"
+      >
+        <div class="flex justify-center">
+          <h5 class="font-bold text-lg">Minggu ke-{{ minggu }}</h5>
+        </div>
+
+        <!-- Loop untuk setiap kelas di minggu tersebut -->
+        <div
+          v-for="(jadwalHari, kelas) in jadwalMinggu"
+          :key="kelas"
+          class="w-full my-6"
+        >
           <div class="flex justify-center">
             <h5 class="font-bold text-lg">{{ kelas }}</h5>
           </div>
-  
+
           <!-- Tabel untuk menampilkan jadwal -->
-          <table  class="border border-black w-2/3 mt-4 mx-auto">
+          <table class="border border-black w-2/3 mt-4 mx-auto">
             <thead>
               <tr>
-                <th class="border-l border-t border-b border-black py-2">Hari</th>
-                <th class="border border-black capitalize w-44" v-for="index in 15" :key="index">
+                <th class="border-l border-t border-b border-black py-2">
+                  Kelas
+                </th>
+                <th
+                  class="border border-black capitalize w-44"
+                  v-for="index in 15"
+                  :key="index"
+                >
                   {{ index }}
                 </th>
               </tr>
             </thead>
             <tbody>
-              <!-- Loop untuk setiap hari -->
-              <tr v-for="day in hari" :key="day">
-                <td class="border border-black px-2 py-1 capitalize">{{ day }}</td>
+              <!-- Loop untuk setiap hari di kelas tersebut -->
+              <tr v-for="(jadwal, day) in jadwalHari" :key="day">
+                <td class="border border-black px-2 py-1 capitalize">
+                  {{ day }}
+                </td>
                 <!-- Loop untuk setiap jam di hari tersebut -->
                 <td
-                  v-for="(subject, index) in jadwalHari[day]"
+                  v-for="(subject, index) in jadwal"
                   :key="index"
                   :class="getBgColor(subject?.mapel?.mapel)"
                   class="border border-black px-2 py-1 text-white"
                 >
-                  <div v-if="subject.user_id == route.params.id" class="flex justify-between">
+                  <div v-if="subject.user.id == route.params.id" class="flex justify-between">
                     <span class="text-sm w-32 h-14">
                       {{ subject?.mapel?.mapel || "-" }}
                     </span>
                     <div class="flex items-end">
                       <span class="text-xs">
                         {{ subject?.user?.nama || "-" }}
-                        <!-- {{ subject.user_id }} -->
+                        <!-- {{ subject.user.nama }} -->
                       </span>
                     </div>
                   </div>
-                  <div v-else>
+                  <div v-else class="flex justify-between">
                     <span class="text-sm w-32 h-14">
                       Mapel
                     </span>
                     <div class="flex items-end">
                       <span class="text-xs">
-                        <!-- {{ subject?.user?.nama || "-" }} -->
+                        
                       </span>
                     </div>
                   </div>
@@ -62,12 +86,13 @@
           </table>
         </div>
       </div>
+      </div>
     </div>
   </template>
   
   <script setup>
   import { onMounted, ref, nextTick } from "vue";
-  import { useRoute } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
   import useKelas from "../../services/data/kelas";
   import useJadwal from "../../services/data/jadwal";
   import html2canvas from "html2canvas";
